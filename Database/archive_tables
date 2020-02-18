@@ -1,0 +1,42 @@
+CREATE TABLE a_closets
+(
+	a_id       VARCHAR(10),
+	a_bld      VARCHAR(80)  NOT NULL,
+	a_subbld   VARCHAR(40)  NOT NULL,
+	a_floor    NUMBER(2)    NOT NULL,
+	a_desc     VARCHAR(500) NOT NULL,
+	CONSTRAINT pk_closets PRIMARY KEY (a_id)
+);
+____________________________________
+CREATE TABLE a_mvalues
+(
+	av_id      VARCHAR(14),           -- id ценности
+	av_closet  VARCHAR(10)            -- шкаф, в котором она хранится
+	av_desc    VARCHAR(500) NOT NULL, -- описание ценности
+      --av_type    VARCHAR(40)  NOT NULL, -- тип ценности
+
+	CONSTRAINT pk_a_values PRIMARY KEY (mv_id), -- определение первичного ключа
+	CONSTRAINT fk_a_values_closets FOREIGN KEY (av_closet) REFERENCES closets (c_id) -- определение внешнего ключа к справочной табл.
+      --CONSTRAINT fk_a_values_types FOREIGN KEY (av_type)   REFERENCES type_values (vt_name) -- определение внешнего ключа к справочной табл.
+);
+___________________________________
+CREATE TABLE a_users
+(
+	au_id   VARCHAR(14),          -- id пользователя
+	au_f    VARCHAR(60) NOT NULL, -- фамилия
+	au_io   VARCHAR(60) NOT NULL, -- имя отчество
+	au_post VARCHAR(60) NOT NULL, -- должность
+
+	CONSTRAINT pk_a_users PRIMARY KEY (au_id) -- определение первичного ключа
+);
+____________________________________
+CREATE TABLE a_taken_values
+(
+	atv_user   VARCHAR(14) NOT NULL, -- id пользователя
+	atv_value  VARCHAR(14) NOT NULL, -- id ценности
+	atv_take   DATE        NOT NULL, -- время взятия
+	atv_return DATE,                 -- время возврата
+
+	CONSTRAINT fk_a_values FOREIGN KEY (atv_value) REFERENCES a_values (av_id), -- определение внешнего ключа
+	CONSTRAINT fk_a_users FOREIGN_KEY (atv_user)  REFERENCES users (au_id) -- определение внешнего ключа
+);
