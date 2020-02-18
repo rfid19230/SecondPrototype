@@ -1,0 +1,73 @@
+-- Создание триггеров на DELETE
+
+/*
+	Триггеры в SQL создаются и хранятся отдельно до момента их удаления. 
+	Триггеры по своей сути представляют обработчики событий. 
+	Они выполняются при наступлении какого-либо простого действия в SQL. 
+	Такими действиями обычно являются: удаление, вставка и обновление данных.
+*/
+_____________________________________
+-- Триггер, заносящий данные в архивную таблицу a_taken_values 
+
+CREATE OR REPLACE
+	TRIGGER trigger_on_delete_tvalues
+AFTER DELETE ON
+	tvalues
+	FOR EACH ROW
+BEGIN
+	INSERT INTO a_taken_values 
+	VALUES 
+	(:old.tv_user,
+	 :old.tv_value,
+	 :old.tv_take,
+	 :old.tv_ret);
+END;
+_____________________________________
+--Триггер, заносящий данные в архивную таблицу a_users 
+
+CREATE OR REPLACE
+	TRIGGER trigger_on_delete_users
+AFTER DELETE ON
+	users
+	FOR EACH ROW
+BEGIN
+	INSERT INTO a_users 
+	VALUES 
+	(:old.u_id,
+	 :old.u_f,
+	 :old.u_io,
+	 :old.u_post);
+END;
+_____________________________________
+--Триггер, заносящий данные в архивную таблицу a_mvalues 
+
+CREATE OR REPLACE
+	TRIGGER trigger_on_delete_mvalues
+AFTER DELETE ON
+	mvalues
+	FOR EACH ROW
+BEGIN
+	INSERT INTO a_mvalues 
+	VALUES 
+	(:old.mv_id,
+	:old.mv_closet,
+	:old.mv_desc);
+END;
+
+_____________________________________
+--Триггер, заносящий данные в архивную таблицу a_closets
+
+CREATE OR REPLACE
+	TRIGGER trigger_on_delete_closets
+AFTER DELETE ON
+	closets
+	FOR EACH ROW
+BEGIN
+	INSERT INTO a_closets
+	VALUES 
+	(:old.c_id,
+	:old.c_bld,
+	:old.c_subbld,
+	:old.c_floor,
+	:old.c_desc);
+END;
