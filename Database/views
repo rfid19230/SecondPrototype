@@ -1,0 +1,28 @@
+-- Создание представления (view)
+
+/*
+	Представления в SQL являются особым объектом, который содержит данные, 
+	полученные запросом SELECT из обычных таблиц. Это виртуальная таблица, 
+	к которой можно обратиться как к обычным таблицам и получить хранимые данные. 
+	Представление в SQL может содержать в себе как данные из одной единственной таблицы, 
+	так и из нескольких таблиц.
+*/
+
+CREATE OR REPLACE VIEW
+	tvview
+AS SELECT
+	u.u_id as tvv_uid, u.u_f as tvv_uf, u.u_io as tvv_uio, u.u_post as tvv_upost,
+	mv.mv_id as tvv_mvid, mv.mv_desc as tvv_mvdesc, mv.mv_closet as tvv_mvcloset,
+	tv.tv_take as tvv_take, tv.tv_ret as tvv_ret
+FROM
+	users u,
+	mvalues mv,
+	tvalues tv
+WHERE
+	u.u_id = tv.tv_user
+	AND
+	mv.mv_id = tv.tv_value
+ORDER BY
+	tv.tv_take DESC;
+
+DISC;
